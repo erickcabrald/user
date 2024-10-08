@@ -21,5 +21,5 @@ let user: User = [
 ];
 
 app.get('/user', (request, reply) => {
-  return user;
+  return reply.status(200).send(user);
 });
