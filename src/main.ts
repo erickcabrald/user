@@ -1,4 +1,4 @@
-import fastify from 'fastify';
+import fastify from '../node_modules/fastify/fastify';
 
 const app = fastify();
 
@@ -21,5 +21,5 @@ let user: User = [
 ];
 
 app.get('/user', (request, reply) => {
-  return user;
+  return reply.status(200).send(user);
 });
