@@ -8,19 +8,21 @@ type User = {
   age: number;
   email: string;
   password: string;
+  id: number;
 }[];
 
-let user: User = [
+let users: User = [
   {
     name: 'jeferson mendes',
     age: 23,
     email: 'jeferson76@gmail.com',
     password: 'fejsf',
+    id: 1,
   },
 ];
 
 app.get('/user', (request, reply) => {
-  return reply.status(200).send(user);
+  return reply.status(200).send(users);
 });
 
 app.post('/user', (request, reply) => {
@@ -49,10 +51,44 @@ app.post('/user', (request, reply) => {
     age,
     email,
     password,
+    id: users.length + 1,
   };
 
-  user.push(newUser);
+  users.push(newUser);
   return reply.status(201).send(newUser);
+});
+
+app.put('/user/:id', (request, reply) => {
+  const { id } = request.params as { id: number };
+
+  // Schema de validação com Zod
+  const Schema = z.object({
+    name: z.string().optional(),
+    age: z.number().min(12).optional(),
+    email: z.string().email().optional(),
+    password: z.string().min(8).optional(),
+  });
+
+  // Valida o corpo da requisição
+  const result = Schema.safeParse(request.body);
+
+  if (!result.success) {
+    return reply.status(400).send({ error: result.error.format() });
+  }
+
+  // Encontrar o usuário pelo ID
+  const userIndex = users.findIndex((u) => u.id === id);
+
+  if (userIndex === -1) {
+    return reply.status(404).send({ error: 'User não esxiste' });
+  }
+
+  // Atualizar as informações permitidas
+  const updatedUser = { ...users[userIndex], ...result.data };
+
+  users[userIndex] = updatedUser;
+
+  return reply.status(200).send(updatedUser);
 });
 
 app.listen({
