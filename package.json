@@ -9,7 +9,7 @@
   "name": "userlogin",
   "description": "",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/main.js",
   "type": "module",
   "scripts": {
     "dev": "node dist/main.js"
