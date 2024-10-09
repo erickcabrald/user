@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import { string, z } from 'zod';
+import { z } from 'zod';
 
 const app = fastify();
 
