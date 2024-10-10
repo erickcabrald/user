@@ -97,6 +97,20 @@ app.put('/user/:id', (request, reply) => {
   return reply.status(200).send(updatedUser);
 });
 
+app.delete('/user/:id', (request, reply) => {
+  const { id } = request.params as { id: number };
+
+  const userIndex = users.findIndex((u) => u.id === Number(id));
+
+  if (userIndex === -1) {
+    return reply.status(404).send({ error: 'User não esxiste' });
+  }
+
+  users.splice(userIndex);
+
+  return reply.status(200).send({ message: 'Usuario deletado' });
+});
+
 app.listen({
   port: 3333,
 });
